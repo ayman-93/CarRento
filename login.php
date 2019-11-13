@@ -4,32 +4,33 @@ session_start();
 // initializing variables
 
 if (isset($_POST['login_user'])){
-$username = "";
-$email    = "";
+$email = "";
 $error = "";
 
 // connect to the database
 $db = mysqli_connect('localhost', 'root', '', 'rental_car');
 
 // Assign the values that comes from the form to variables
-$username = mysqli_real_escape_string($db, $_POST['email']);
+$email = mysqli_real_escape_string($db, $_POST['email']);
 $password = mysqli_real_escape_string($db, $_POST['password']);
 
-// SQL query to get the user from the database if the values we have assigned to $username and $password get matched in the database.
-$query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+// SQL query to get the user from the database if the values we have assigned to $email and $password get matched in the database.
+$query = "SELECT * FROM users WHERE email='$email' AND password='$password' LIMIT 1";
 // execute the query
 $results = mysqli_query($db, $query);
 if (mysqli_num_rows($results) == 1) {
+	$row = mysqli_fetch_assoc($results);
 	$_SESSION['loggedin'] = true;
-	$_SESSION['username'] = $username;
+	$_SESSION['user_id'] = $row['id'];
   	header('location: index.php');
 } else {
-	if(!empty($username) && !empty($password)){
+	if(!empty($email) && !empty($password)){
 		$error = "Wrong valdition";
 	}
 }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 

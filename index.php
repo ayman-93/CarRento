@@ -1,5 +1,36 @@
 <?php 
 	session_start();
+
+	// initializing variables
+
+if (isset($_POST['rent'])){
+	$user_id = $_SESSION["user_id"];
+	$car_id = "";
+	$start_date  = "";
+	$end_date = "";
+	$days = "";
+	$price = "";
+	
+	// connect to the database
+	$db = mysqli_connect('localhost', 'root', '', 'rental_car');
+	
+	// Assign the values that comes from the form to variables
+	$car_id = mysqli_real_escape_string($db, $_POST['car_id']);
+	$start_date = mysqli_real_escape_string($db, $_POST['start_date']);
+	$end_date = mysqli_real_escape_string($db, $_POST['end_date']);
+	$days = mysqli_real_escape_string($db, $_POST['days']);
+	$price = mysqli_real_escape_string($db, $_POST['price']);
+
+	
+	$query = "INSERT INTO  `reservations`(`user_id`, `car_id`, `start_date`, `end_date`, `days`, `total_price`) VALUES ('$user_id', '$car_id', '$start_date', '$end_date', '$days', '$price')";
+	if (mysqli_query($db, $query)) {
+		header('location: mange.php');
+	} else {
+		echo "Error: " . $query . "<br>" . mysqli_error($db);
+	}
+	
+	mysqli_close($db);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -8,6 +39,8 @@
 	<title>الرئيسية</title>
 	<meta charset="UTF-8">
 
+	<!-- Footer style -->
+	<link rel="stylesheet" href="style/footer.css">
 	<!-- Bootstrap Theme style -->
 	<link rel="stylesheet" type="text/css" href="./style/bootstrap.min.css">
 
@@ -20,9 +53,6 @@
 
 	<!-- Cairo and Oswald font from Google-Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Cairo|Oswald&display=swap" rel="stylesheet">
-
-
-
 </head>
 
 <body>
@@ -93,154 +123,14 @@
 		<div class="main-text text-center">
 			<h1 class="text-white display-1 font-weight-bold">CarRento</h1>
 			<h4 class="text-white font-italic text-capitalize">best choise to rent a car</h4>
-			<button class="btn btn-light main-btn mt-3">Rent Now</button>
+			<button class="btn btn-light main-btn mt-3" id="rent-now-btn" href="#rent-now">Rent Now</button>
 		</div>
-	</header>	
+	</header>
 
 
-	<div class="container">
-		<form>			
-			<div class="input-group input-daterange">
-				<input type="text" class="form-control">
-				<!-- <div class="input-group-addon">to</div> -->
-				<input type="text" class="form-control">
-				<select class="form-control form-control-sm">
-					<option default>select a car</option>
-					<?php
-
-						$conn = new mysqli('localhost', 'root', '', 'rental_car');
-						// Check connection
-						if ($conn->connect_error) {
-							die("Connection failed: " . $conn->connect_error);
-						}
-						
-						$sql = "SELECT * FROM cars";
-						$result = $conn->query($sql);
-						
-						if ($result->num_rows > 0) {
-							// output data of each row
-							while($row = $result->fetch_assoc()) {
-								echo "<option>".$row["car_name"]. " " . $row["car_model"] . " " . $row["car_price"]."Sr"."</option>";
-							}
-						} else {
-							echo "<option>"."0 results"."</option>";
-						}
-						$conn->close();
-
-						// $db = mysqli_connect('localhost', 'root', '', 'rental_car');
-						// $query = "SELECT * FROM cars";
-						// $result = $db->query($query);
-					
-						// if($row = $result->fetch_assoc()){
-						// while($row = $result->fetch_assoc()) {
-						// 	echo "<option>"."id: " . $row["id"]. " - Name: " . $row["car_name"]. " " . $row["car_model"]."</option>";
-						// }
-						// } else {
-						// 	echo "<option>"."0 results"."</option>";
-						// }
-						// $i = 0;
-						// while($i<5){
-						// 	echo "<option>"."I is ".$i."</option>";
-						// 	$i++;
-						// }
-
-						?>
-					
-				</select>
-			</div>
-		</form>
-
-		<form>
-  <fieldset>
-    <legend>Legend</legend>
-    <div class="form-group row">
-      <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
-      <div class="col-sm-10">
-        <input type="text" readonly="" class="form-control-plaintext" id="staticEmail" value="email@example.com">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="exampleInputEmail1">Email address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-    </div>
-    <div class="form-group">
-      <label for="exampleInputPassword1">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-    </div>
-    <div class="form-group">
-      <label for="exampleSelect1">Example select</label>
-      <select class="form-control" id="exampleSelect1">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="exampleSelect2">Example multiple select</label>
-      <select multiple="" class="form-control" id="exampleSelect2">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="exampleTextarea">Example textarea</label>
-      <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
-    </div>
-    <div class="form-group">
-      <label for="exampleInputFile">File input</label>
-      <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
-      <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
-    </div>
-    <fieldset class="form-group">
-      <legend>Radio buttons</legend>
-      <div class="form-check">
-        <label class="form-check-label">
-          <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-          Option one is this and that—be sure to include why it's great
-        </label>
-      </div>
-      <div class="form-check">
-      <label class="form-check-label">
-          <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
-          Option two can be something else and selecting it will deselect option one
-        </label>
-      </div>
-      <div class="form-check disabled">
-      <label class="form-check-label">
-          <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios3" value="option3" disabled="">
-          Option three is disabled
-        </label>
-      </div>
-    </fieldset>
-    <fieldset class="form-group">
-      <legend>Checkboxes</legend>
-      <div class="form-check">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="" checked="">
-          Option one is this and that—be sure to include why it's great
-        </label>
-      </div>
-      <div class="form-check disabled">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="" disabled="">
-          Option two is disabled
-        </label>
-      </div>
-    </fieldset>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </fieldset>
-</form>
-	</div>
-
-
+	<!-- Services -->
 	<section id="services">
-		<div class="container-flued mt-5 p-5">
+		<div class="container-flued p-5">
 			<hr>
 			<h1 class="text-center">Services</h1>
 			<div class="row d-flex  justify-content-center">
@@ -292,20 +182,232 @@
 		</div>
 	</section>
 
+	<!-- Rent form -->
+	<div class="container-flued p-5" id="rent-now">
+		<hr>
+		<h1 class="text-center">Rent Now</h1>
+		<div class="row justify-content-around py-5">
+			<div class="col-5">
+				<div class="row justify-content-center">
+					<img class="mx-auto" src="https://bolides.be/wp-content/uploads/2019/02/Asset-10.png" alt=""
+						width="500">
+				</div>
+			</div>
+			<div class="col-5">
+				<div class="continer-flued border py-4 px-3">
+					<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
+						<div class="row">
+							<div class="col-12">
+								<label>Car </label>
+								<select id="car" name="car_id" class="form-control">
+									<option default>select a car</option>
+									<?php
+				
+										$conn = new mysqli('localhost', 'root', '', 'rental_car');
+										// Check connection
+										if ($conn->connect_error) {
+											die("Connection failed: " . $conn->connect_error);
+										}
+										
+										$sql = "SELECT * FROM cars";
+										$result = $conn->query($sql);
+										
+										if ($result->num_rows > 0) {
+											// output data of each row
+											while($row = $result->fetch_assoc()) {
+												echo "<option value=".$row["car_id"].">".$row["car_name"]. " " . $row["car_model"] . " " . $row["car_price"]."Sr"."</option>";
+											}
+										} else {
+											echo "<option>"."0 results"."</option>";
+										}
+										$conn->close();	
+										
+										?>
+								</select>
+							</div>
+						</div>
+						<div class="row py-3">
+							<div class="col-12">
+								<div class="input-daterange" data-provide="datepicker">
+									<div class="row">
+										<div class="col-6">
+											<label>From</label>
+											<input type="text" class="form-control" name="start_date" id="startDate">
+											<div class="input-group-addon">
+												<span class="glyphicon glyphicon-th"></span>
+											</div>
+										</div>
+
+										<div class="col-6">
+											<label>To</label>
+											<input type="text" class="form-control" name="end_date" id="endDate">
+											<div class="input-group-addon">
+												<span class="glyphicon glyphicon-th"></span>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<div class="row py-3">
+							<div class="col-12">
+								<label>Days</label>
+								<input id="days" type="text" name="days" class="form-control" readonly value="">
+							</div>
+						</div>
+						<div class="row py-3">
+							<div class="col-12">
+								<label>Price</label>
+								<input id="price" type="text" name="price" class="form-control" readonly value="">
+							</div>
+						</div>
+						<div class="row">
+							<button type="submit" class="btn btn-primary rounded w-25 mx-auto" name="rent">Rent</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Footer -->
+	<section id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+					<ul class="list-unstyled list-inline social text-center">
+						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-facebook"></i></a>
+						</li>
+						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-twitter"></i></a></li>
+						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-instagram"></i></a>
+						</li>
+						<li class="list-inline-item"><a href="javascript:void();"><i class="fa fa-google-plus"></i></a>
+						</li>
+						<li class="list-inline-item"><a href="javascript:void();" target="_blank"><i
+									class="fa fa-envelope"></i></a></li>
+					</ul>
+				</div>
+				</hr>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
+					<p><u><a href="https://www.nationaltransaction.com/">National Transaction Corporation</a></u> is a
+						Registered MSP/ISO of Elavon, Inc. Georgia [a wholly owned subsidiary of U.S. Bancorp,
+						Minneapolis, MN]</p>
+					<!-- <p class="h6">&copy All right Reversed.<a class="text-green ml-2" href="https://www.sunlimetech.com" target="_blank">Sunlimetech</a></p> -->
+				</div>
+				</hr>
+			</div>
+		</div>
+	</section>
+	<!-- ./Footer -->
+
 
 	<!-- JQuery for bootstrap -->
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-		crossorigin="anonymous"></script>
+	<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+		</script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+	<!-- rent now button script -->
+	<script>
+		// $(document).ready(function () {
+			$('#rent-now-btn').click(function() {
+			console.log("clicked");
+			
+			$('html,body').animate({
+				scrollTop: $('#rent-now').offset().top - 20},
+				'slow');
+		});
+	// })
+
+	</script>
+
+	<!-- Price script -->
+	<script>
+		// event listener for the fields
+		$('#car').change(calculateDays);
+		$('#startDate').change(calculateDays);
+		$('#endDate').change(calculateDays);
+		
+		// define variables
+		var startDateVal;
+		var endDateVal;
+		 
+		// this function count days between two dates then call calculatePrice function
+		function calculateDays() {
+			// initialize variables, get the value from the input using jquery.
+			startDateVal = $('#startDate').val();
+			endDateVal = $('#endDate').val();
+			const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+			const firstDate = new Date(startDateVal);
+			const secondDate = new Date(endDateVal);
+			
+			const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+
+			// set the field of the price useing jquery
+			if(!isNaN(diffDays))
+			$("#days").val(diffDays);
+
+		
+			// here we call the price function and give it the number of days as a parmiter.
+			calculatePrice(diffDays);
+		}
+
+
+		// this function get the car price from the database and multiplie it by the diffDays which is the number of days
+		function calculatePrice(diffDays){
+			var carId = $("#car").val();
+			var carPrice;
+
+			// here we use ajax to get the price. (https://www.w3schools.com/php/php_ajax_database.asp)
+			// var xmlhttp = new XMLHttpRequest();
+			// xmlhttp.onreadystatechange = function() {
+			// 	if (this.readyState == 4 && this.status == 200) {
+			// 		carPrice = parseInt(this.responseText);
+			// 		console.log("carPrice", typeof carPrice);
+					
+			// 		if(isNaN(carPrice)){
+			// 			$("#price").val("Select Car..");
+			// 		} else {
+			// 		$("#price").val(carPrice * diffDays + "Sr" );}
+			// 		}
+			// };
+			// xmlhttp.open("GET", "getPrice.php?car_id="+ carId , true);
+			// xmlhttp.send();	
+
+			fetch("getPrice.php?car_id="+carId)
+			.then(res => res.json())
+			.then(carPrice => {
+				if(isNaN(carPrice) || isNaN(diffDays)){
+					$("#price").val("Select Car..");
+				}
+				else {
+					// $("#price").val(carPrice );
+					console.log(diffDays);
+					
+					$("#price").val(carPrice * diffDays + "Sr" );
+				}
+				})
+				.catch(() => $("#price").val("Select Car.."))
+		}
+
+	</script>
+
 
 	<!-- Datepacker script -->
 	<script>
 		$(document).ready(function () {
 			$('.input-daterange').datepicker({
-				format: 'yyyy-mm-dd',
+				format: 'yyyy/mm/dd',
+				// format: 'yyyy-MM-dd',
+				// format: 'MM dd, yyyy',
 				autoclose: true,
 				uiLibrary: 'bootstrap4'
 			});
+
 		});
 	</script>
 

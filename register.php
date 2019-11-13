@@ -1,6 +1,5 @@
 <?php
 session_start();
-session_destroy();
 
 // connect to the database
 $db = mysqli_connect('localhost', 'root', '', 'rental_car');
@@ -20,7 +19,13 @@ $password = mysqli_real_escape_string($db, $_POST['password']);
 $query = "INSERT INTO users (username, email, password) 
           VALUES('$username', '$email', '$password')";
 
-mysqli_query($db, $query);
-header('location: index.html');
+if(!mysqli_query($db, $query)){
+  echo("Error description: " . mysqli_error($con));
+  } else {
+    $_SESSION['loggedin'] = true;
+    $_SESSION['username'] = $username;
+    header('location: index.php');
+  }
 
+mysqli_close($db);
 ?>
