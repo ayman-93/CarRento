@@ -4,7 +4,7 @@
         echo 0;
     } else {
         
-    $conn = new mysqli('localhost', 'root', '', 'rental_car');
+    $conn = new mysqli('localhost', 'root', '', 'car_rento');
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
         echo 0;

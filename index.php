@@ -12,7 +12,7 @@ if (isset($_POST['rent'])){
 	$price = "";
 	
 	// connect to the database
-	$db = mysqli_connect('localhost', 'root', '', 'rental_car');
+	$db = mysqli_connect('localhost', 'root', '', 'car_rento');
 	
 	// Assign the values that comes from the form to variables
 	$car_id = mysqli_real_escape_string($db, $_POST['car_id']);
@@ -36,7 +36,7 @@ if (isset($_POST['rent'])){
 <html>
 
 <head>
-	<title>الرئيسية</title>
+	<title>Car Rento</title>
 	<meta charset="UTF-8">
 
 	<!-- Footer style -->
@@ -58,66 +58,43 @@ if (isset($_POST['rent'])){
 <body>
 
 	<header class="header">
-		<nav class="navbar-expand-lg navbar-dark bg-primary navbar fixed-top ">
+	<nav class="navbar-expand-lg navbar-dark bg-primary navbar fixed-top ">
 
-			<!-- <ul class="navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link" href="login.php">Login</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="register.html">Register</a>
-				</li>
-			</ul> -->
-
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-				aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<a class="navbar-brand" href="#"><img src="./images/logo.png"
-					style="width: 150px; margin: -5rem 0; filter: contrast(0.1) brightness(2.5); display: block;">
-
-			</a>
-			<div class="collapse navbar-collapse" id="navbarColor01">
-				<!-- <form class="form-inline my-2 my-lg-0">
-				<input class="form-control mr-sm-2" type="text" placeholder="Search">
-				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-			</form> -->
-				<!-- <ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="login.html">Login</a>
-					</li>
-				</ul> -->
-				<ul class="navbar-nav ml-auto">
-					<?php
-						if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-					echo "<ul class='nav-item'><a class='nav-link' href='logout.php'>Logout</a></ul>
-					<li class='nav-item'>
-						<a class='nav-link' href='#'>About</a>
-					</li>
-					<li class='nav-item'>
-						<a class='nav-link' href='#'>Pricing</a>
-					</li>
-					<li class='nav-item'>
-						<a class='nav-link' href='#'>Features</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+	aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+	<span class="navbar-toggler-icon"></span>
+</button>
+<a class="navbar-brand" href="#"><img src="./images/logo.png"
+		style="width: 150px; margin: -5rem 0; filter: contrast(0.1) brightness(2.5); display: block;">
+</a>
+<div class="collapse navbar-collapse" id="navbarColor01">
+	<ul class="navbar-nav ml-auto">
+		<?php
+			if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+				echo "<ul class='nav-item'><a class='nav-link' href='logout.php'>Logout</a></ul>
+					<li class='nav-item '>
+						<a class='nav-link' href='mange.php'>Mange <span class='sr-only'>(current)</span></a>
 					</li>
 					<li class='nav-item active'>
-						<a class='nav-link' href='#'>Home <span class='sr-only'>(current)</span></a>
+						<a class='nav-link' href='./index.php'>Home </a>
 					</li>
-					";
-						} else {
-							echo "<li class='nav-item'>
-						<a class='nav-link' href='login.php'>Login</a>
-					</li>
-					<li class='nav-item'>
-						<a class='nav-link' href='register.html'>Register</a>
+				";
+				} else {
+				echo "<li class='nav-item'>
+							<a class='nav-link' href='login.php'>Login</a>
+						</li>
+						<li class='nav-item'>
+						<a class='nav-link' href='register.php'>Register</a>
+						</li>
+						<li class='nav-item active'>
+						<a class='nav-link' href='./index.php'>Home </a>
 					</li>";
-						}
-						?>
-				</ul>
+			}
+		?>
+	</ul>
 
-			</div>
-
-		</nav>
+</div>
+</nav>
 
 
 		<div class="main-text text-center">
@@ -202,30 +179,32 @@ if (isset($_POST['rent'])){
 								<select id="car" name="car_id" class="form-control">
 									<option default>select a car</option>
 									<?php
-				
-										$conn = new mysqli('localhost', 'root', '', 'rental_car');
-										// Check connection
-										if ($conn->connect_error) {
-											die("Connection failed: " . $conn->connect_error);
-										}
-										
-										$sql = "SELECT * FROM cars";
-										$result = $conn->query($sql);
-										
-										if ($result->num_rows > 0) {
-											// output data of each row
-											while($row = $result->fetch_assoc()) {
-												echo "<option value=".$row["car_id"].">".$row["car_name"]. " " . $row["car_model"] . " " . $row["car_price"]."Sr"."</option>";
+										// if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+											$conn = new mysqli('localhost', 'root', '', 'car_rento');
+											// Check connection
+											if ($conn->connect_error) {
+												die("Connection failed: " . $conn->connect_error);
 											}
-										} else {
-											echo "<option>"."0 results"."</option>";
-										}
-										$conn->close();	
+											
+											$sql = "SELECT * FROM cars";
+											$result = $conn->query($sql);
+											
+											if ($result->num_rows > 0) {
+												// output data of each row
+												while($row = $result->fetch_assoc()) {
+													echo "<option value=".$row["car_id"].">".$row["car_name"]. " " . $row["car_model"] . " " . $row["car_price"]."Sr"."</option>";
+												}
+											} else {
+												echo "<option>"."No Cars.."."</option>";
+											}
+											$conn->close();
+										// }
 										
 										?>
 								</select>
 							</div>
 						</div>
+						<!-- Dates -->
 						<div class="row py-3">
 							<div class="col-12">
 								<div class="input-daterange" data-provide="datepicker">
@@ -250,18 +229,21 @@ if (isset($_POST['rent'])){
 								</div>
 							</div>
 						</div>
+						<!-- Days -->
 						<div class="row py-3">
 							<div class="col-12">
 								<label>Days</label>
 								<input id="days" type="text" name="days" class="form-control" readonly value="">
 							</div>
 						</div>
+						<!-- Price -->
 						<div class="row py-3">
 							<div class="col-12">
 								<label>Price</label>
 								<input id="price" type="text" name="price" class="form-control" readonly value="">
 							</div>
 						</div>
+						<!-- Rent Button -->
 						<div class="row">
 							<button type="submit" class="btn btn-primary rounded w-25 mx-auto" name="rent">Rent</button>
 						</div>

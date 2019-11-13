@@ -2,10 +2,12 @@
 /* BASIC */
 
   body {
-    background: url("../images/95143575.jpg") center/cover no-repeat;
-    padding-top: 150px; 
+    font-family: 'Cairo', sans-serif;
+    /* background: url("../images/95143575.jpg") center/cover no-repeat;  */
   }
-
+  .nav-link {
+    /* font-size: 1.4rem; */
+}
   .my-error {
     color: black;
     font-weight: 900;
@@ -39,7 +41,8 @@ a {
     justify-content: center;
     width: 100%;
     min-height: 100%;
-    padding: 20px;
+    /* max-height: 80%; */
+    padding: 10px; //
   }
   
   #formContent {
@@ -112,7 +115,7 @@ a {
     transform: scale(0.95);
   }
   
-  input[type=email] {
+  input[type=email], input[type=password], input[type=text] {
     background-color: #f6f6f6;
     border: none;
     color: #0d0d0d;
@@ -132,7 +135,7 @@ a {
     -webkit-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
   }
-  input[type=password] {
+  /* input[type=password] {
     background-color: #f6f6f6;
     border: none;
     color: #0d0d0d;
@@ -151,7 +154,7 @@ a {
     transition: all 0.5s ease-in-out;
     -webkit-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
-  }
+  } */
   
   input[type=email]:focus {
     background-color: #fff;
