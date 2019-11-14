@@ -38,6 +38,7 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav ml-auto">
             <?php
+                 
                 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
                     echo "<ul class='nav-item'><a class='nav-link' href='logout.php'>Logout</a></ul>
                         <li class='nav-item active'>
@@ -67,6 +68,7 @@
 
 <div class="container mt-5">
     <h1 class="text-center under-line">Manage</h1>
+    <!-- <h1 class="text-center under-line">user id: <?php// echo $_SESSION['user_id'] ?></h1> -->
     <hr>
     <table class="table my-table">
             <thead class="thead-dark">
@@ -80,15 +82,23 @@
         </thead>
         <tbody>
             <?php
-                $user_id = $_SESSION["user_id"];
+
                 $conn = new mysqli('localhost', 'root', '', 'car_rento');
                 // Check connection
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);
                 }
+                // SELECT team.Teamname, person.Firstname, person.Lastname 
+                // FROM person
+                // JOIN player ON person.id = player.person_id
+                // JOIN team  ON player.team_id = team.id
+                // $sql = "SELECT * FROM reservations WHERE user_id = '$user_id'";
+                // $sql = "SELECT reservations.*,cars.car_name,cars.car_model FROM `reservations`,`cars` WHERE user_id = '$user_id'";
+
                 
-                $sql = "SELECT * FROM reservations WHERE user_id = '$user_id'";
-                $sql = "SELECT reservations.*,cars.car_name,cars.car_model FROM `reservations`,`cars` WHERE user_id = '$user_id'";
+                if (isset($_SESSION['user_id'])) {
+                    /// your code here
+                    $sql = "SELECT reservations.reservation_id, reservations.days, reservations.total_price, cars.car_name,cars.car_model FROM `reservations` JOIN `cars` on cars.car_id = reservations.car_id where user_id = ". $_SESSION['user_id'];
                 $result = $conn->query($sql);
                 
                 if ($result->num_rows > 0) {
@@ -99,10 +109,14 @@
                                 <td>".$row["car_name"]."</td>
                                 <td>".$row["car_model"]."</td>
                                 <td>".$row["days"]."</td>
-                                <td>".$row["total_price"]."</td>
+                                <td>".$row["total_price"]." ريال "."</td>
                             </tr>";
                         }
-                    } else {
+                    }else {
+                        echo "<tr><td> No Cars ..</td></tr>";
+                    }
+                }
+                 else {
                         echo "<tr><td> No Cars ..</td></tr>";
                     }
                     ?>

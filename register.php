@@ -15,19 +15,38 @@ if (isset($_POST['register_user'])){
 	$password = md5($password);//encrypt the password before saving in the database
 
 	$query = "INSERT INTO users (name, email, password) 
-			VALUES('$name', '$email', '$password')";
+      VALUES('$name', '$email', '$password')";
+      
 
-// $result = mysqli_query($db, $query);
-	if($result){
-		$row = mysqli_fetch_assoc($results);	
-		$_SESSION['loggedin'] = true;
-		$_SESSION['user_id'] = $row['id'];
-		// header('location: index.php');
-	} else {
-		if(!empty($email) && !empty($password)){
-			$error = "Wrong valdition";
-		}
+  if(!empty($email) && !empty($password)){ 
+    mysqli_query($db, $query);
+    // $row = mysqli_fetch_assoc($results);	
+    $_SESSION['loggedin'] = true;
+
+    $select_query = "SELECT * from users WHERE email = '$email'";
+    $results = mysqli_query($db, $select_query);
+
+    if (mysqli_num_rows($results) == 1) {
+      $row = mysqli_fetch_assoc($results);
+      $_SESSION['loggedin'] = true;
+      $_SESSION['user_id'] = $row['user_id'];
+      header('location: index.php');
+    }
 	}
+  
+  
+  
+// $result = mysqli_query($db, $query);
+// 	if($result){
+// 		$row = mysqli_fetch_assoc($results);	
+// 		$_SESSION['loggedin'] = true;
+// 		$_SESSION['user_id'] = $row['id'];
+// 		// header('location: index.php');
+// 	} else {
+// 		if(!empty($email) && !empty($password)){
+// 			$error = "Wrong valdition";
+// 		}
+// 	}
 
 	mysqli_close($db);
 }
@@ -108,13 +127,6 @@ if (isset($_POST['register_user'])){
 					<div class="fadeIn first">
 						<img src="./images/logo.png" id="icon" alt="User Icon" />
 					</div>
-					<!-- Warning message if username or password wrong -->
-					<h1 style="color: red; font-weight: 900;">
-						<?php 
-							if(!empty($error))
-							echo $error;
-						?>
-					</h1>
 					<!-- Register form -->
 					<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 

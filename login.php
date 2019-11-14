@@ -22,7 +22,7 @@ $results = mysqli_query($db, $query);
 if (mysqli_num_rows($results) == 1) {
 	$row = mysqli_fetch_assoc($results);
 	$_SESSION['loggedin'] = true;
-	$_SESSION['user_id'] = $row['id'];
+	$_SESSION['user_id'] = $row['user_id'];
   	header('location: index.php');
 } else {
 	if(!empty($email) && !empty($password)){

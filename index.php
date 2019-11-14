@@ -1,9 +1,11 @@
 <?php 
+	
 	session_start();
 
 	// initializing variables
 
 if (isset($_POST['rent'])){
+
 	$user_id = $_SESSION["user_id"];
 	$car_id = "";
 	$start_date  = "";
@@ -192,7 +194,7 @@ if (isset($_POST['rent'])){
 											if ($result->num_rows > 0) {
 												// output data of each row
 												while($row = $result->fetch_assoc()) {
-													echo "<option value=".$row["car_id"].">".$row["car_name"]. " " . $row["car_model"] . " " . $row["car_price"]."Sr"."</option>";
+													echo "<option value=".$row["car_id"].">".$row["car_name"]. " " . $row["car_model"] . " " . $row["car_price"]." ريال "."</option>";
 												}
 											} else {
 												echo "<option>"."No Cars.."."</option>";
@@ -370,7 +372,7 @@ if (isset($_POST['rent'])){
 					// $("#price").val(carPrice );
 					console.log(diffDays);
 					
-					$("#price").val(carPrice * diffDays + "Sr" );
+					$("#price").val(carPrice * diffDays + " ريال " );
 				}
 				})
 				.catch(() => $("#price").val("Select Car.."))
