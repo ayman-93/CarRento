@@ -26,7 +26,7 @@ if (isset($_POST['rent'])){
 	
 	$query = "INSERT INTO  `reservations`(`user_id`, `car_id`, `start_date`, `end_date`, `days`, `total_price`) VALUES ('$user_id', '$car_id', '$start_date', '$end_date', '$days', '$price')";
 	if (mysqli_query($db, $query)) {
-		header('location: mange.php');
+		header('location: manage.php');
 	} else {
 		echo "Error: " . $query . "<br>" . mysqli_error($db);
 	}
@@ -40,7 +40,118 @@ if (isset($_POST['rent'])){
 <head>
 	<title>Car Rento</title>
 	<meta charset="UTF-8">
+	<style>
+		/* * {
+			margin: 0;
+			padding: 0;
+		} */
 
+		.hero {
+			height: 67.5vh;
+			width: 100%;
+			background-image: url('images/sky.jpg');
+			background-size: cover;
+			background-position: center;
+			position: relative;
+			overflow-x: hidden;
+		}
+
+		.highway {
+			height: 200px;
+			width: 500%;
+			display: block;
+			background-image: url("images/road.jpg");
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 1;
+			background-repeat: repeat-x;
+			animation: highway 5s linear infinite;
+		}
+
+		@keyframes highway {
+			100%{
+				transform: translateX(-3400px);
+			}
+		}
+
+		.city {
+			height: 250px;
+			width: 500%;
+			background-image: url("images/city.png");
+			position: absolute;
+			bottom: 200px;
+			left: 0;
+			right: 0;
+			display: block;
+			z-index: 1;
+			background-repeat: repeat-x;
+			animation: city 20s linear infinite;
+		}
+
+		@keyframes city {
+			100% {
+				transform: translateX(-1400px);
+			}
+		}
+
+		.car {
+			width: 400px;
+			left: 50%;
+			bottom: 100px;
+			transform: translateX(-50%);
+			position: absolute;
+			z-index: 2;
+		}
+
+		.car img {
+			width: 100%;
+			animation: car 1s linear infinite;
+		}
+
+		@keyframes car {
+			100% {
+				transform: translateY(-1px);
+			}
+			50% {
+				transform: translateY(1px);
+			}
+			0% {
+				transform: translateY(-1px);
+			}
+		}
+
+		.wheel {
+			left: 50%;
+			bottom: 178px;
+			transform: translateX(-50%);
+			position: absolute;
+			z-index: 2;
+		}
+
+		.wheel img {
+			width: 72px;
+			height: 72px;
+			animation: wheel 1s linear infinite;
+		}
+
+		.back-wheel {
+			left: -165px;
+			position: absolute;
+		}
+
+		.front-wheel {
+			left: 80px;
+			position: absolute;
+		}
+
+		@keyframes wheel {
+			100%{
+				transform: rotate(360deg);
+			}
+		}
+	</style>
 	<!-- Footer style -->
 	<link rel="stylesheet" href="style/footer.css">
 	<!-- Bootstrap Theme style -->
@@ -75,7 +186,7 @@ if (isset($_POST['rent'])){
 			if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 				echo "<ul class='nav-item'><a class='nav-link' href='logout.php'>Logout</a></ul>
 					<li class='nav-item '>
-						<a class='nav-link' href='mange.php'>Mange <span class='sr-only'>(current)</span></a>
+						<a class='nav-link' href='manage.php'>Manage <span class='sr-only'>(current)</span></a>
 					</li>
 					<li class='nav-item active'>
 						<a class='nav-link' href='./index.php'>Home </a>
@@ -161,19 +272,19 @@ if (isset($_POST['rent'])){
 		</div>
 	</section>
 
-	<!-- Rent form -->
+	<!-- Rent Form -->
 	<div class="container-flued p-5" id="rent-now">
 		<hr>
 		<h1 class="text-center">Rent Now</h1>
 		<div class="row justify-content-around py-5">
-			<div class="col-5">
-				<div class="row justify-content-center">
-					<img class="mx-auto" src="https://bolides.be/wp-content/uploads/2019/02/Asset-10.png" alt=""
+			<div class="col-5 d-lg-flex d-none justify-content-center align-items-center">
+				<div class="row">
+					<img src="https://bolides.be/wp-content/uploads/2019/02/Asset-10.png" alt=""
 						width="500">
 				</div>
 			</div>
-			<div class="col-5">
-				<div class="continer-flued border py-4 px-3">
+			<div class="col">
+				<div class="continer-flued border p-5">
 					<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 						<div class="row">
 							<div class="col-12">
@@ -254,7 +365,25 @@ if (isset($_POST['rent'])){
 			</div>
 		</div>
 	</div>
+	
+	<div class="container">
+		<hr>		
+	</div>
 
+	<!-- test drow car -->
+	<!-- <div class="container-flued mt-5">
+		<div class="hero">
+			<div class="highway"></div>
+			<div class="city"></div>
+			<div class="car">
+				<img src="images/car.png" alt="">
+			</div>
+			<div class="wheel">
+				<img src="images/wheel.png" alt="" class="back-wheel">
+				<img src="images/wheel.png" alt="" class="front-wheel">
+			</div>
+		</div>
+	</div> -->
 
 	<!-- Footer -->
 	<section id="footer">
@@ -302,7 +431,7 @@ if (isset($_POST['rent'])){
 			console.log("clicked");
 			
 			$('html,body').animate({
-				scrollTop: $('#rent-now').offset().top - 20},
+				scrollTop: $('#rent-now').offset().top - 40},
 				'slow');
 		});
 	// })
@@ -360,7 +489,7 @@ if (isset($_POST['rent'])){
 			// 		}
 			// };
 			// xmlhttp.open("GET", "getPrice.php?car_id="+ carId , true);
-			// xmlhttp.send();	
+			// xmlhttp.send();
 
 			fetch("getPrice.php?car_id="+carId)
 			.then(res => res.json())
