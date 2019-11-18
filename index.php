@@ -357,23 +357,7 @@
 		// this function get the car price from the database and multiplie it by the diffDays which is the number of days
 		function calculatePrice(diffDays){
 			var carId = $("#car").val();
-			var carPrice;
-
-			// here we use ajax to get the price. (https://www.w3schools.com/php/php_ajax_database.asp)
-			// var xmlhttp = new XMLHttpRequest();
-			// xmlhttp.onreadystatechange = function() {
-			// 	if (this.readyState == 4 && this.status == 200) {
-			// 		carPrice = parseInt(this.responseText);
-			// 		console.log("carPrice", typeof carPrice);
-					
-			// 		if(isNaN(carPrice)){
-			// 			$("#price").val("Select Car..");
-			// 		} else {
-			// 		$("#price").val(carPrice * diffDays + "Sr" );}
-			// 		}
-			// };
-			// xmlhttp.open("GET", "getPrice.php?car_id="+ carId , true);
-			// xmlhttp.send();
+			// var carPrice;
 
 			fetch("getPrice.php?car_id="+carId)
 			.then(res => res.json())
