@@ -1,66 +1,65 @@
 <?php
+// here we start the session
 session_start();
 
-
+// here we check if the request from the button sumbit with name "register_user" in the form(line 168)
 if (isset($_POST['register_user'])){
-	$error = "";
 	// connect to the database
 	$db = mysqli_connect('localhost', 'root', '', 'car_rento');
 
+	// here we store the value that comes from the register form.
+	// we use "mysqli_real_escape_string()" to Escapes special characters in a string for use in an SQL statement
 	$name = mysqli_real_escape_string($db, $_POST['name']);
 	$email = mysqli_real_escape_string($db, $_POST['email']);
 	$password = mysqli_real_escape_string($db, $_POST['password']);
 
 
-	$password = md5($password);//encrypt the password before saving in the database
+	$password = md5($password);//encrypt(hash) the password before saving in the database
 
+	// SQL query to insert new user
 	$query = "INSERT INTO users (name, email, password) 
       VALUES('$name', '$email', '$password')";
       
-
+	// if statment to check if the email or the password is empty.
   if(!empty($email) && !empty($password)){ 
-    mysqli_query($db, $query);
-    // $row = mysqli_fetch_assoc($results);	
-    $_SESSION['loggedin'] = true;
+	//   here we execute our query to insert the new user
+	// mysqli_query() is a function that execute sql query. 
+	mysqli_query($db, $query);
 
-    $select_query = "SELECT * from users WHERE email = '$email'";
-    $results = mysqli_query($db, $select_query);
+	// here is another query to get the user we just registed, to get his id and store it in the session.
+	$select_query = "SELECT * from users WHERE email = '$email'";
+	// execute query and save the results in varibale $results.
+	$results = mysqli_query($db, $select_query);
+	
+	// mysqli_fetch_assoc() is a funtion take the $results and return the first row and if you call it agin, it will give you the next row and so on.. 
+	$row = mysqli_fetch_assoc($results);
 
-    if (mysqli_num_rows($results) == 1) {
-      $row = mysqli_fetch_assoc($results);
-      $_SESSION['loggedin'] = true;
-      $_SESSION['user_id'] = $row['user_id'];
-      header('location: index.php');
-    }
+	// create new session variable(global variable stored on the server) loggedin and take bool type(True or False), to chacke if the user logged in or no.
+	$_SESSION['loggedin'] = true;
+	// another session variable to store the user id, we will use it when he rent a car.
+	$_SESSION['user_id'] = $row['user_id'];
+
+	// redirect to index.php(home).
+	header('location: index.php');
+    
 	}
-  
-  
-  
-// $result = mysqli_query($db, $query);
-// 	if($result){
-// 		$row = mysqli_fetch_assoc($results);	
-// 		$_SESSION['loggedin'] = true;
-// 		$_SESSION['user_id'] = $row['id'];
-// 		// header('location: index.php');
-// 	} else {
-// 		if(!empty($email) && !empty($password)){
-// 			$error = "Wrong valdition";
-// 		}
-// 	}
-
+	
+	// after we done using the database, we close the connection.
 	mysqli_close($db);
 }
 ?>
 
-
+<!-- here the html start -->
 <!DOCTYPE html>
 <html>
 
 <head>
 	<title>Registration system PHP and MySQL</title>
 	<meta charset="UTF-8">
+	<!-- theme style -->
 	<link rel="stylesheet" type="text/css" href="style/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="style/style2.css">
+	<!--  -->
+	<link rel="stylesheet" type="text/css" href="style/custome.css">
 	<link rel="stylesheet" type="text/css" href="style/loginStyle.css">
 	
     <link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet">
@@ -76,20 +75,12 @@ if (isset($_POST['register_user'])){
 				aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<a class="navbar-brand" href="#"><img src="./images/logo.png"
+			<a class="navbar-brand" href="index.php"><img src="./images/logo.png"
 					style="width: 150px; margin: -5rem 0; filter: contrast(0.1) brightness(2.5); display: block;">
 
 			</a>
 			<div class="collapse navbar-collapse" id="navbarColor01">
-				<!-- <form class="form-inline my-2 my-lg-0">
-				<input class="form-control mr-sm-2" type="text" placeholder="Search">
-				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-			</form> -->
-				<!-- <ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="login.php">Login</a>
-					</li>
-				</ul> -->
+				
 				<ul class="navbar-nav ml-auto">
 					<?php
 						if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {

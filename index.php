@@ -2,163 +2,53 @@
 	
 	session_start();
 
-	// initializing variables
-
-if (isset($_POST['rent'])){
-
-	$user_id = $_SESSION["user_id"];
-	$car_id = "";
-	$start_date  = "";
-	$end_date = "";
-	$days = "";
-	$price = "";
 	
-	// connect to the database
-	$db = mysqli_connect('localhost', 'root', '', 'car_rento');
-	
-	// Assign the values that comes from the form to variables
-	$car_id = mysqli_real_escape_string($db, $_POST['car_id']);
-	$start_date = mysqli_real_escape_string($db, $_POST['start_date']);
-	$end_date = mysqli_real_escape_string($db, $_POST['end_date']);
-	$days = mysqli_real_escape_string($db, $_POST['days']);
-	$price = mysqli_real_escape_string($db, $_POST['price']);
+	// here we check if the request from the button sumbit with name "rent" in the form(line 246)
+	if (isset($_POST['rent'])){
+		// connect to the database
+		$db = mysqli_connect('localhost', 'root', '', 'car_rento');
+		
+		// Assign the values that comes from the form to variables
+		$car_id = mysqli_real_escape_string($db, $_POST['car_id']);
+		$start_date = mysqli_real_escape_string($db, $_POST['start_date']);
+		$end_date = mysqli_real_escape_string($db, $_POST['end_date']);
+		$days = mysqli_real_escape_string($db, $_POST['days']);
+		$price = mysqli_real_escape_string($db, $_POST['price']);
 
-	
-	$query = "INSERT INTO  `reservations`(`user_id`, `car_id`, `start_date`, `end_date`, `days`, `total_price`) VALUES ('$user_id', '$car_id', '$start_date', '$end_date', '$days', '$price')";
-	if (mysqli_query($db, $query)) {
+		// here we get the user_id from the session.
+		$user_id = $_SESSION["user_id"];
+		
+		// SQL query to insert the reservation information.
+		$query = "INSERT INTO  `reservations`(`user_id`, `car_id`, `start_date`, `end_date`, `days`, `total_price`) VALUES ('$user_id', '$car_id', '$start_date', '$end_date', '$days', '$price')";
+		
+		// execute the query.
+		mysqli_query($db, $query);
+
+		// redirect to index.php(home).
 		header('location: manage.php');
-	} else {
-		echo "Error: " . $query . "<br>" . mysqli_error($db);
+		
+		// close the connection with the database.
+		mysqli_close($db);
 	}
-	
-	mysqli_close($db);
-}
 ?>
+
+<!-- HTML start here -->
 <!DOCTYPE html>
 <html>
 
 <head>
+
 	<title>Car Rento</title>
 	<meta charset="UTF-8">
-	<style>
-		/* * {
-			margin: 0;
-			padding: 0;
-		} */
-
-		.hero {
-			height: 67.5vh;
-			width: 100%;
-			background-image: url('images/sky.jpg');
-			background-size: cover;
-			background-position: center;
-			position: relative;
-			overflow-x: hidden;
-		}
-
-		.highway {
-			height: 200px;
-			width: 500%;
-			display: block;
-			background-image: url("images/road.jpg");
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			z-index: 1;
-			background-repeat: repeat-x;
-			animation: highway 5s linear infinite;
-		}
-
-		@keyframes highway {
-			100%{
-				transform: translateX(-3400px);
-			}
-		}
-
-		.city {
-			height: 250px;
-			width: 500%;
-			background-image: url("images/city.png");
-			position: absolute;
-			bottom: 200px;
-			left: 0;
-			right: 0;
-			display: block;
-			z-index: 1;
-			background-repeat: repeat-x;
-			animation: city 20s linear infinite;
-		}
-
-		@keyframes city {
-			100% {
-				transform: translateX(-1400px);
-			}
-		}
-
-		.car {
-			width: 400px;
-			left: 50%;
-			bottom: 100px;
-			transform: translateX(-50%);
-			position: absolute;
-			z-index: 2;
-		}
-
-		.car img {
-			width: 100%;
-			animation: car 1s linear infinite;
-		}
-
-		@keyframes car {
-			100% {
-				transform: translateY(-1px);
-			}
-			50% {
-				transform: translateY(1px);
-			}
-			0% {
-				transform: translateY(-1px);
-			}
-		}
-
-		.wheel {
-			left: 50%;
-			bottom: 178px;
-			transform: translateX(-50%);
-			position: absolute;
-			z-index: 2;
-		}
-
-		.wheel img {
-			width: 72px;
-			height: 72px;
-			animation: wheel 1s linear infinite;
-		}
-
-		.back-wheel {
-			left: -165px;
-			position: absolute;
-		}
-
-		.front-wheel {
-			left: 80px;
-			position: absolute;
-		}
-
-		@keyframes wheel {
-			100%{
-				transform: rotate(360deg);
-			}
-		}
-	</style>
+	
 	<!-- Footer style -->
 	<link rel="stylesheet" href="style/footer.css">
+	
 	<!-- Bootstrap Theme style -->
 	<link rel="stylesheet" type="text/css" href="./style/bootstrap.min.css">
 
 	<!-- customize style -->
-	<link rel="stylesheet" type="text/css" href="./style/style2.css">
+	<link rel="stylesheet" type="text/css" href="./style/custome.css">
 
 	<!-- datepicker style -->
 	<link rel="stylesheet"
@@ -170,52 +60,62 @@ if (isset($_POST['rent'])){
 
 <body>
 
-	<header class="header">
+<!-- Header: contain navabar and the main section with Porsche image as background -->
+<header class="header">
+
 	<nav class="navbar-expand-lg navbar-dark bg-primary navbar fixed-top ">
+		<!-- side button show on small window(screen) only  -->
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+			aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-	aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-	<span class="navbar-toggler-icon"></span>
-</button>
-<a class="navbar-brand" href="#"><img src="./images/logo.png"
-		style="width: 150px; margin: -5rem 0; filter: contrast(0.1) brightness(2.5); display: block;">
-</a>
-<div class="collapse navbar-collapse" id="navbarColor01">
-	<ul class="navbar-nav ml-auto">
-		<?php
-			if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-				echo "<ul class='nav-item'><a class='nav-link' href='logout.php'>Logout</a></ul>
-					<li class='nav-item '>
-						<a class='nav-link' href='manage.php'>Manage <span class='sr-only'>(current)</span></a>
-					</li>
-					<li class='nav-item active'>
-						<a class='nav-link' href='./index.php'>Home </a>
-					</li>
-				";
-				} else {
-				echo "<li class='nav-item'>
-							<a class='nav-link' href='login.php'>Login</a>
-						</li>
-						<li class='nav-item'>
-						<a class='nav-link' href='register.php'>Register</a>
-						</li>
-						<li class='nav-item active'>
-						<a class='nav-link' href='./index.php'>Home </a>
-					</li>";
-			}
-		?>
-	</ul>
+		<!-- logo -->
+		<a class="navbar-brand" href="#"><img src="./images/logo.png"
+				style="width: 150px; margin: -5rem 0; filter: contrast(0.1) brightness(2.5); display: block;">
+		</a>
+		<!-- navabar items -->
+		<div class="collapse navbar-collapse" id="navbarColor01">
+			<ul class="navbar-nav ml-auto">
+				<!-- here is php code to check if user loged in or not -->
+				<?php
+					// The isset() function is used to check whether a variable is set or not.
+					// and if it set we will check if it's true.
+					if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+						// if the expression true this mean the user is loged in so will display Logout, Manage and Home
+						echo "<ul class='nav-item'><a class='nav-link' href='logout.php'>Logout</a></ul>
+							<li class='nav-item '>
+								<a class='nav-link' href='manage.php'>Manage <span class='sr-only'>(current)</span></a>
+							</li>
+							<li class='nav-item active'>
+								<a class='nav-link' href='./index.php'>Home </a>
+							</li>
+						";
+						} else {
+							// if the expression is false we will display Login, Register and Home.
+						echo "<li class='nav-item'>
+									<a class='nav-link' href='login.php'>Login</a>
+								</li>
+								<li class='nav-item'>
+								<a class='nav-link' href='register.php'>Register</a>
+								</li>
+								<li class='nav-item active'>
+								<a class='nav-link' href='./index.php'>Home </a>
+							</li>";
+					}
+				?>
+			</ul>
 
-</div>
-</nav>
-
-
-		<div class="main-text text-center">
-			<h1 class="text-white display-1 font-weight-bold">CarRento</h1>
-			<h4 class="text-white font-italic text-capitalize">best choise to rent a car</h4>
-			<button class="btn btn-light main-btn mt-3" id="rent-now-btn" href="#rent-now">Rent Now</button>
 		</div>
-	</header>
+	</nav>
+	
+	<!-- here is the main section -->
+	<div class="main-text text-center">
+		<h1 class="text-white display-1 font-weight-bold">CarRento</h1>
+		<h4 class="text-white font-italic text-capitalize">best choise to rent a car</h4>
+		<button class="btn btn-light main-btn mt-3" id="rent-now-btn" href="#rent-now">Rent Now</button>
+	</div>
+</header>
 
 
 	<!-- Services -->
@@ -226,7 +126,7 @@ if (isset($_POST['rent'])){
 			<div class="row d-flex  justify-content-center">
 				<div class="col-sm-10 col-md-5 col-lg-3 p-4">
 					<div class="card">
-						<img src="images/luxury2.png" class="card-img" alt="...">
+						<img src="images/luxury.png" class="card-img" alt="...">
 						<div class="card-body">
 							<h5 class="card-title">luxury cars</h5>
 							<p class="card-text">Some quick example text to build on the card title and make up
@@ -292,15 +192,15 @@ if (isset($_POST['rent'])){
 								<select id="car" name="car_id" class="form-control">
 									<option default>select a car</option>
 									<?php
-										// if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 											$conn = new mysqli('localhost', 'root', '', 'car_rento');
 											// Check connection
 											if ($conn->connect_error) {
 												die("Connection failed: " . $conn->connect_error);
 											}
 											
-											$sql = "SELECT * FROM cars";
-											$result = $conn->query($sql);
+											
+											$select_query = "SELECT * FROM cars";
+											$result = $conn->query($select_query);
 											
 											if ($result->num_rows > 0) {
 												// output data of each row
@@ -366,24 +266,8 @@ if (isset($_POST['rent'])){
 		</div>
 	</div>
 	
-	<div class="container">
-		<hr>		
-	</div>
 
-	<!-- test drow car -->
-	<!-- <div class="container-flued mt-5">
-		<div class="hero">
-			<div class="highway"></div>
-			<div class="city"></div>
-			<div class="car">
-				<img src="images/car.png" alt="">
-			</div>
-			<div class="wheel">
-				<img src="images/wheel.png" alt="" class="back-wheel">
-				<img src="images/wheel.png" alt="" class="front-wheel">
-			</div>
-		</div>
-	</div> -->
+
 
 	<!-- Footer -->
 	<section id="footer">

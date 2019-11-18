@@ -9,21 +9,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Manage</title>
-
 	<!-- Bootstrap Theme style -->
 	<link rel="stylesheet" type="text/css" href="./style/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./style/style2.css">
-    
-    <link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet">
-    <style>
-         body {
-            
-            /* background: url("./images/95143575.jpg") center/cover no-repeat; */
-            }
-            .my-table {
-                background: white;
-            }
-    </style>
+
+	<!-- customize style -->
+	<link rel="stylesheet" type="text/css" href="./style/custome.css">
+
+	<!-- datepicker style -->
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+
+	<!-- Cairo font from Google-Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar-expand-lg navbar-dark bg-primary navbar">
@@ -42,7 +39,7 @@
                 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
                     echo "<ul class='nav-item'><a class='nav-link' href='logout.php'>Logout</a></ul>
                         <li class='nav-item active'>
-                            <a class='nav-link' href='mange.php'>Mange <span class='sr-only'>(current)</span></a>
+                            <a class='nav-link' href='manage.php'>Manage <span class='sr-only'>(current)</span></a>
                         </li>
                         <li class='nav-item'>
                             <a class='nav-link' href='./index.php'>Home </a>

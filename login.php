@@ -38,17 +38,19 @@ if (mysqli_num_rows($results) == 1) {
 <head>
 	<title>Registration system PHP and MySQL</title>
 	<meta charset="UTF-8">
-	<!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
-	<!-- <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
-		integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous"> -->
+		<!-- Bootstrap Theme style -->
+		<link rel="stylesheet" type="text/css" href="./style/bootstrap.min.css">
 
-	<!-- Bootstrap Theme style -->
-	<link rel="stylesheet" type="text/css" href="./style/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="./style/style2.css">
+<!-- customize style -->
+<link rel="stylesheet" type="text/css" href="./style/custome.css">
 
-	<link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet">
+<!-- datepicker style -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+
+<!-- Cairo font from Google-Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="./style/loginStyle.css">
-	<!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
 </head>
 
 <body>
@@ -62,7 +64,7 @@ if (mysqli_num_rows($results) == 1) {
 			aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<a class="navbar-brand" href="#"><img src="./images/logo.png"
+		<a class="navbar-brand" href="index.php"><img src="./images/logo.png"
 				style="width: 150px; margin: -5rem 0; filter: contrast(0.1) brightness(2.5); display: block;">
 
 		</a>
@@ -93,7 +95,7 @@ if (mysqli_num_rows($results) == 1) {
 					<a class='nav-link' href='register.php'>Register</a>
 				</li>
 				<li class='nav-item'>
-					<a class='nav-link' href='#'>Home <span class='sr-only'>(current)</span></a>
+					<a class='nav-link' href='index.php'>Home <span class='sr-only'>(current)</span></a>
 				</li>
 				";
 					}
